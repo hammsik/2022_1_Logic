@@ -9,17 +9,17 @@ def seqsearch(nbrs, target):
     return -1
     
 
-def recbinsearch(mylist, lower, upper, target)  :
+def recbinsearch(mylist, lower, upper, target) :
     mid = int((lower + upper) / 2)
 
-    if mylist[mid] == target :
+    if lower > upper :
+        return -1
+    elif mylist[mid] == target :
         return mid
     elif mylist[mid] < target :
-        return(recbinsearch(mylist, mid+1, upper, target))
-    elif mylist[mid] > target :
-        return(recbinsearch(mylist, lower, mid - 1, target))
-    else :
-    	return -1
+        return (recbinsearch(mylist, mid+1, upper, target))
+    else : # mylist[mid] > target
+        return (recbinsearch(mylist, lower, mid-1, target))
 
 
 numofnbrs = int(input("Enter a number: "))
@@ -44,7 +44,7 @@ for target in targets:
     if idx == -1:
         cnt += 1
 ts = time.time() - ts
-print("recbinsearch %d: not found %d time %.6f" % (numoftargets, cnt, ts))
+print("recbinsearch %d : not found %d time %.6f" % (numoftargets, cnt, ts))
 
 ts = time.time()
 
@@ -55,4 +55,4 @@ for target in targets:
     if idx == -1:
         cnt += 1
 ts = time.time() - ts
-print("seqsearch %d: not found %d time %.6f" % (numoftargets, cnt, ts))
+print("seqsearch %d : not found %d time %.6f" % (numoftargets, cnt, ts))

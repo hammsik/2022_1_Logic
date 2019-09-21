@@ -1,21 +1,12 @@
 #반복문을 이용한 피보나치 수열
 def interfibo(n) :
-    one = 0
-    two = 1
+    before = 1
+    fibo = 0
 
-    if n == 0 :
-        return 0
+    for i in range(n) :
+            fibo, before = fibo + before, fibo
 
-    elif n == 1 :
-        return 1
-
-    else :
-        for i in range(n-1) :
-            fibo = one + two
-            one = two
-            two = fibo
-
-        return fibo
+    return fibo
 
 #재귀함수를 이용한 피보나치 수열
 def fibo(n) :
