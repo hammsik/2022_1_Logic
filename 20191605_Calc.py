@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWidgets import QLineEdit, QToolButton
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QLayout, QGridLayout
+import time
 
 
 class Button(QToolButton):
@@ -28,7 +29,7 @@ class Calculator(QWidget):
         self.display = QLineEdit('')
         self.display.setReadOnly(True)
         self.display.setAlignment(Qt.AlignRight)
-        self.display.setMaxLength(15)
+        self.display.setMaxLength(40)
 
         # Digit Buttons
         self.digitButton = [x for x in range(0, 10)]
@@ -95,8 +96,15 @@ class Calculator(QWidget):
         button = self.sender()
         key = button.text()
         if key == "=":
-            result = str(eval(self.display.text()))
-            self.display.setText(result)
+            try:
+                result = str(eval(self.display.text()))
+                self.display.setText(result)
+            except:
+                # self.display.setText("Invalid operating!")
+                # time.sleep(2)
+                # self.display.setText("")
+                self.display.setText("Invalid operating! Press button \"C\"")
+
         elif key == "C":
             self.display.setText("")
         else:
