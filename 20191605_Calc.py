@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWidgets import QLineEdit, QToolButton
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QLayout, QGridLayout
-import time
 
+from keypad2 import numPadList, operatorList, constantDic, functionList, cal
 
 class Button(QToolButton):
 
@@ -20,97 +20,80 @@ class Button(QToolButton):
         size.setWidth(max(size.width(), size.height()))
         return size
 
+
 class Calculator(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
         # Display Window
-        self.display = QLineEdit('')
+        self.display = QLineEdit()
         self.display.setReadOnly(True)
         self.display.setAlignment(Qt.AlignRight)
-        self.display.setMaxLength(40)
+        self.display.setMaxLength(15)
 
-        # Digit Buttons
-        self.digitButton = [x for x in range(0, 10)]
+        # Button Creation and Placement
+        numLayout = QGridLayout()
+        opLayout = QGridLayout()
+        constLayout = QGridLayout()
+        funcLayout = QGridLayout()
 
-        for i in range(10):
-            self.digitButton[i] = Button(str(i), self.buttonClicked)
+        buttonGroups = {
+            'num': {'buttons': numPadList, 'layout': numLayout, 'columns': 3},
+            'op': {'buttons': operatorList, 'layout': opLayout, 'columns': 2},
+            'constants': {'buttons': constantDic, 'layout': constLayout, 'columns': 1},
+            'functions': {'buttons': functionList, 'layout': funcLayout, 'columns': 1},
+        }
 
-        # . and = Buttons
-        self.decButton = Button('.', self.buttonClicked)
-        self.eqButton = Button('=', self.buttonClicked)
+        for label in buttonGroups.keys():
+            r = 0; c = 0
+            buttonPad = buttonGroups[label]
+            for btnText in buttonPad['buttons']:
+                button = Button(btnText, self.buttonClicked)
+                buttonPad['layout'].addWidget(button, r, c)
+                c += 1
+                if c >= buttonPad['columns']:
+                    c = 0; r += 1
 
-        # Operator Buttons
-        self.mulButton = Button('*', self.buttonClicked)
-        self.divButton = Button('/', self.buttonClicked)
-        self.addButton = Button('+', self.buttonClicked)
-        self.subButton = Button('-', self.buttonClicked)
-
-        # Parentheses Buttons
-        self.lparButton = Button('(', self.buttonClicked)
-        self.rparButton = Button(')', self.buttonClicked)
-
-        # Clear Button
-        self.clearButton = Button('C', self.buttonClicked)
-
-        # Main Layout
+        # Layout
         mainLayout = QGridLayout()
         mainLayout.setSizeConstraint(QLayout.SetFixedSize)
 
         mainLayout.addWidget(self.display, 0, 0, 1, 2)
-
-        #Number Layout
-        numLayout = QGridLayout()
-
-        w = 1
-        for j in range(3):
-            for k in range(3):
-                numLayout.addWidget(self.digitButton[w], 2-j, k)
-                w += 1
-        numLayout.addWidget(self.digitButton[0], 3, 0)
-        numLayout.addWidget(self.decButton, 3, 1)
-        numLayout.addWidget(self.eqButton, 3, 2)
-
         mainLayout.addLayout(numLayout, 1, 0)
-
-        #Operation Layout
-        opLayout = QGridLayout()
-
-        opLayout.addWidget(self.mulButton, 0, 0)
-        opLayout.addWidget(self.divButton, 0, 1)
-        opLayout.addWidget(self.addButton, 1, 0)
-        opLayout.addWidget(self.subButton, 1, 1)
-
-        opLayout.addWidget(self.lparButton, 2, 0)
-        opLayout.addWidget(self.rparButton, 2, 1)
-
-        opLayout.addWidget(self.clearButton, 3, 0)
-
         mainLayout.addLayout(opLayout, 1, 1)
+        mainLayout.addLayout(constLayout, 2, 0)
+        mainLayout.addLayout(funcLayout, 2, 1)
 
         self.setLayout(mainLayout)
+
         self.setWindowTitle("My Calculator")
 
+
     def buttonClicked(self):
+
+        if self.display.text() == 'Error!':
+            self.display.setText('')
+
         button = self.sender()
         key = button.text()
-        if key == "=":
+
+        if key == '=':
             try:
                 result = str(eval(self.display.text()))
-                self.display.setText(result)
             except:
-                # self.display.setText("Invalid operating!")
-                # time.sleep(2)
-                # self.display.setText("")
-                self.display.setText("Invalid operating! Press button \"C\"")
-
-        elif key == "C":
-            self.display.setText("")
+                result = 'Error!'
+            self.display.setText(result)
+        elif key == 'C':
+            self.display.clear()
+        elif key in constantDic.keys():
+            self.display.setText(self.display.text() + constantDic[key])
+        elif key in functionList:
+            n = self.display.text()
+            value = cal(key, n)
+            self.display.setText(str(value))
         else:
-            self.display.setText(self.display.text()+key)
-
-
+            self.display.setText(self.display.text() + key)
 
 if __name__ == '__main__':
 
