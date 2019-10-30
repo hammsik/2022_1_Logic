@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QLineEdit, QToolButton
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QLayout, QGridLayout
 
-from keypad2 import numPadList, operatorList, constantDic, functionList, cal
+from keypad2 import numPadList, operatorList, constantDic, functionDic
 
 class Button(QToolButton):
 
@@ -42,7 +42,7 @@ class Calculator(QWidget):
             'num': {'buttons': numPadList, 'layout': numLayout, 'columns': 3},
             'op': {'buttons': operatorList, 'layout': opLayout, 'columns': 2},
             'constants': {'buttons': constantDic, 'layout': constLayout, 'columns': 1},
-            'functions': {'buttons': functionList, 'layout': funcLayout, 'columns': 1},
+            'functions': {'buttons': functionDic, 'layout': funcLayout, 'columns': 1},
         }
 
         for label in buttonGroups.keys():
@@ -69,7 +69,6 @@ class Calculator(QWidget):
 
         self.setWindowTitle("My Calculator")
 
-
     def buttonClicked(self):
 
         if self.display.text() == 'Error!':
@@ -84,16 +83,24 @@ class Calculator(QWidget):
             except:
                 result = 'Error!'
             self.display.setText(result)
+
         elif key == 'C':
             self.display.clear()
+
         elif key in constantDic.keys():
-            self.display.setText(self.display.text() + constantDic[key])
-        elif key in functionList:
+            if self.display.text()[-1] in operatorList:
+                self.display.setText(self.display.text() + constantDic[key])
+            else:
+                self.display.setText('Error!')
+
+        elif key in functionDic:
             n = self.display.text()
-            value = cal(key, n)
+            value = functionDic[key](n)
             self.display.setText(str(value))
+
         else:
             self.display.setText(self.display.text() + key)
+
 
 if __name__ == '__main__':
 

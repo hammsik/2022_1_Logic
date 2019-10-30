@@ -21,18 +21,9 @@ constantDic = {
     '태양과의 평균 거리 (km)' : '1.5E+8',
 }
 
-functionList = [
-    'factorial (!)',
-    '-> binary',
-    'binary -> dec',
-    '-> roman',
-]
-
-def cal(btnT, x):
-    funcDic = {
-    'factorial (!)' : calcFunctions.factorial(x),
-    '-> binary' : calcFunctions.decToBin(x),
-    'binary -> dec' : calcFunctions.binToDec(x),
-    '-> roman' : calcFunctions.decToRoman(x),
-    }
-    return funcDic[btnT]
+functionDic = {
+    'factorial (!)': calcFunctions.factorial,
+    '-> binary': calcFunctions.decToBin,
+    'binary -> dec': calcFunctions.binToDec,
+    '-> roman': calcFunctions.decToRoman,
+}
