@@ -26,4 +26,5 @@ functionDic = {
     '-> binary': calcFunctions.decToBin,
     'binary -> dec': calcFunctions.binToDec,
     '-> roman': calcFunctions.decToRoman,
+    'roman -> dec': calcFunctions.romanToDec,
 }

@@ -88,10 +88,13 @@ class Calculator(QWidget):
             self.display.clear()
 
         elif key in constantDic.keys():
-            if self.display.text()[-1] in operatorList:
-                self.display.setText(self.display.text() + constantDic[key])
+            if self.display.text() != '':
+                if (self.display.text()[-1] in operatorList):
+                    self.display.setText(self.display.text() + constantDic[key])
+                else:
+                    self.display.setText('Error!')
             else:
-                self.display.setText('Error!')
+                self.display.setText(constantDic[key])
 
         elif key in functionDic:
             n = self.display.text()
