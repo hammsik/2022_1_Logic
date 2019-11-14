@@ -15,19 +15,27 @@ def gameMain():
         print(display)
         guess.display()
 
-        guessedChar = input('Select a letter: ')
-        if len(guessedChar) != 1:
-            print('One character at a time!')
-            continue
-        if guessedChar in guess.guessedChars:
-            print('You already guessed \"' + guessedChar + '\"')
-            continue
+        while True:
+            guessedChar = input('Select a letter: ')
+            if len(guessedChar) != 1:
+                print('One character at a time!')
+                continue
+            elif guessedChar in guess.guessedChars:
+                print('You already guessed \"' + guessedChar + '\"')
+                continue
+            elif not guessedChar.isalpha():
+                print("Enter only alphabet!")
+                continue
+            elif guessedChar.isupper():
+                print("Enter only lower!")
+                continue
+            else:
+                break
 
-        guess.guess(guessedChar)
-        if guess.currentStatus == guess.secretWord:
+        if guess.guess(guessedChar) == True:
             break
 
-    if guess.currentStatus == guess.secretWord:
+    if guess.guess(guessedChar):
         print('Success! The SecretWord is %s' %guess.secretWord)
     else:
         print(hangman.get(0))
