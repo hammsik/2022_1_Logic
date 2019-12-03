@@ -3,7 +3,7 @@ class Guess:
     def __init__(self, word):
         self.secretWord = word
         self.currentStatus = '_' * len(word)
-        self.guessedChars = {'e', 'n'}
+        self.guessedChars = {''}
         self.guess('')
 
 
@@ -44,4 +44,3 @@ class Guess:
         for c in sorted(list(self.guessedChars)):
             guessed += (c + ' ')
         return guessed
-

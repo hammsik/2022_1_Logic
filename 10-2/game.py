@@ -7,40 +7,38 @@ def gameMain():
     word = Word('words.txt')
     guess = Guess(word.randFromDB())
     hangman = Hangman()
-    maxTries = hangman.getLife()
 
-    while guess.numTries < maxTries:
+    while hangman.remainingLives > 0:
 
-        display = hangman.get(maxTries - guess.numTries)
+        display = hangman.currentShape()
         print(display)
-        guess.display()
+        display = guess.displayCurrent()
+        print('Current: ' + display)
+        display = guess.displayGuessed()
+        print('Already Used:' + display)
 
-        while True:
-            guessedChar = input('Select a letter: ')
-            if len(guessedChar) != 1:
-                print('One character at a time!')
-                continue
-            elif guessedChar in guess.guessedChars:
-                print('You already guessed \"' + guessedChar + '\"')
-                continue
-            elif not guessedChar.isalpha():
-                print("Enter only alphabet!")
-                continue
-            elif guessedChar.isupper():
-                print("Enter only lower!")
-                continue
-            else:
-                break
+        guessedChar = input('Select a letter: ')
+        if len(guessedChar) != 1:
+            print('One character at a time!')
+            continue
+        if guessedChar in guess.guessedChars:
+            print('You already guessed \"' + guessedChar + '\"')
+            continue
 
-        if guess.guess(guessedChar) == True:
+        success = guess.guess(guessedChar)
+        if success == False:
+            hangman.decreaseLife()
+        
+        if guess.finished():
             break
 
-    if guess.guess(guessedChar):
-        print('Success! The SecretWord is %s' %guess.secretWord)
+    if guess.finished() == True:
+        print('**** ' + guess.displayCurrent() + ' ****')
+        print('Success')
     else:
-        print(hangman.get(0))
+        print(hangman.currentShape())
         print('word [' + guess.secretWord + ']')
-        print('guess [' + guess.currentStatus + ']')
+        print('guess [' + guess.displayCurrent() + ']')
         print('Fail')
 
 
