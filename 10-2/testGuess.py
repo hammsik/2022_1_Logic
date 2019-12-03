@@ -18,8 +18,7 @@ class TestGuess(unittest.TestCase):
         self.assertEqual(self.g1.guess('p'), False)
         self.assertTrue(
             (self.g1.guess('d'), self.g1.guess('e'), self.g1.guess('f'),
-             self.g1.guess('a'), self.g1.guess('u'), self.g1.guess('l'),
-             self.g1.guess(''))
+             self.g1.guess('a'), self.g1.guess('u'), self.g1.guess('l'))
         )
         self.assertTrue(self.g1.finished()) #단어를 완성했을 때 finished 메소드 체크
 
