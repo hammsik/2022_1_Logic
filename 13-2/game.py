@@ -93,6 +93,7 @@ class HangmanGame(QWidget):
         self.gameOver = False
         self.hangmanWindow.setPlaceholderText(self.hangman.currentShape())
 
+        #비밀단어의 길이가 8보다 크면 단어길이에 따라 너비를 넓혀줌
         if len(self.guess.secretWord) > 8:
             self.currentWord.setFixedWidth(len(self.guess.secretWord) * 22)
 
